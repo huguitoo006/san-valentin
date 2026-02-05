@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>San Valentín 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ------------------ FONDO ------------------ */
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    position: relative;
+    background: radial-gradient(circle at top left, #ff8fa3, #ff6a88),
+                radial-gradient(circle at bottom right, #ffb3c1, #ff6a88);
+    background-size: 200% 200%;
+    animation: fondoPremium 12s ease-in-out infinite alternate;
+}
+@keyframes fondoPremium {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+/* ------------------ CONTENEDOR DE PREGUNTA ------------------ */
+#container {
+    display: none;
+    text-align: center;
+    background: rgba(255,255,255,0.25);
+    padding: 45px 35px;
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    width: 360px;
+    position: relative;
+    z-index: 10;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.4);
+    animation: entradaCinematica 1.4s ease;
+}
+@keyframes entradaCinematica {
+    0% { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(5px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+h1 {
+    font-family: 'Pacifico', cursive;
+    color: #ff2f63;
+    font-size: 34px;
+    margin-bottom: 25px;
+    text-shadow: 0 3px 8px rgba(255,0,80,0.25);
+}
+
+/* ------------------ BOTONES ------------------ */
+.buttons {
+    margin-top: 25px;
+    position: relative;
+    height: 160px;
+}
+
+button {
+    padding: 12px 32px;
+    font-size: 17px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+#yes {
+    background: linear-gradient(135deg,#ff4d6d,#ff7a9e);
+    color: white;
+    box-shadow: 0 6px 15px rgba(255,0,80,0.35);
+    transition: transform 0.25s ease;
+}
+#yes:hover { transform: scale(1.12); }
+
+#no {
+    background-color: #e8e8e8;
+    color: #555;
+    position: absolute;
+    left: 120px;
+    top: 70px;
+    pointer-events: auto;
+    border: 1px solid #ccc;
+    transition: transform 0.2s ease;
+}
+
+/* ------------------ MENSAJE FINAL ------------------ */
+.happy {
+    display: none;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 1.2s ease forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.happy p {
+    font-size: 26px;
+    color: #ff2f63;
+    font-weight: 700;
+    text-shadow: 0 3px 8px rgba(255,0,80,0.25);
+    white-space: pre-wrap;
+}
+
+.happy img {
+    margin-top: 20px;
+    width: 100%;
+    height: 330px;
+    object-fit: cover;
+    border-radius: 25px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.35);
+}
+
+/* ------------------ MINI-JUEGO ------------------ */
+#gameContainer {
+    display: block;
+    position: relative;
+    width: 360px;
+    height: 300px;
+    margin-top: 20px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.15);
+    border-radius: 25px;
+}
+
+.game-heart {
+    position: absolute;
+    font-size: 30px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+#score {
+    font-size: 24px;
+    color: #ff2f63;
+    text-align: center;
+    margin-bottom: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Mini-juego -->
+<div class="game-container" id="gameContainer">
+    <div id="score">Puntos: 0</div>
+</div>
+
+<!-- Contenedor de pregunta -->
+<div class="container" id="container">
+    <h1 id="question">¿Quieres pasar San Valentín conmigo? 💘</h1>
+
+    <div class="buttons" id="buttons">
+        <button id="yes">Sí 💖</button>
+        <button id="no">No 😅</button>
+    </div>
+
+    <div class="happy" id="happyMessage">
+        <p id="typedText"></p>
+        <img src="foto.jpg" alt="Nuestra foto">
+    </div>
+</div>
+
+<script>
+/* ------------------ MINI-JUEGO ------------------ */
+const gameContainer = document.getElementById('gameContainer');
+let score = 0;
+const scoreDisplay = document.getElementById('score');
+
+function crearCorazonFlotante() {
+    const heart = document.createElement('span');
+    heart.textContent = '💘';
+    heart.className = 'game-heart';
+    heart.style.fontSize = `${Math.random()*30+20}px`;
+    heart.style.left = Math.random()*(gameContainer.offsetWidth-40)+'px';
+    heart.style.top = gameContainer.offsetHeight+'px';
+    gameContainer.appendChild(heart);
+
+    const velocidad = Math.random()*2 + 1;
+
+    function mover() {
+        const top = parseFloat(heart.style.top);
+        if(top < -50) heart.remove();
+        else {
+            heart.style.top = top - velocidad + 'px';
+            requestAnimationFrame(mover);
+        }
+    }
+    mover();
+
+    heart.addEventListener('click', () => {
+        score++;
+        scoreDisplay.textContent = `Puntos: ${score}`;
+        heart.style.transform = 'scale(2) rotate(45deg)';
+        heart.style.opacity = 0;
+        setTimeout(()=>heart.remove(),300);
+
+        if(score >= 10) {
+            gameContainer.style.display = 'none';
+            container.style.display = 'block';
+        }
+    });
+
+    setTimeout(()=>{ if(heart.parentElement) heart.remove(); }, 5000);
+}
+
+setInterval(crearCorazonFlotante, 1000);
+
+/* ------------------ BOTÓN NO (NUEVA LÓGICA) ------------------ */
+const noButton = document.getElementById("no");
+noButton.style.pointerEvents = "auto";
+
+let porcentaje = 0;
+
+const frases = [
+    "¿Pero qué haces, criatura? 😂",
+    "Ese clic ha dolido más que mi ex 😭",
+    "Bro… ¿estás bien? 🤨",
+    "Eso era el SÍ disfrazado, fijo 🤡",
+    "Tu dedo está troleándome 😒",
+    "Ni tu WiFi falla tanto como tú 😭",
+    "JAJA vale, muy graciosa… dale al SÍ ya 🤣",
+    "¿Te crees gamer o qué? No spamees 😤",
+    "Mi cora está en mantenimiento por tu culpa 💔🔧",
+    "Si sigues así llamo a tu madre 😳",
+    "Plot twist: ese clic cuenta como SÍ 😎",
+    "No te rías que lloro 😭",
+    "¿Quieres pelea? Porque así empiezan las peleas 😤",
+    "JAJAJA vale, ya, suelta el NO 🤣",
+    "Tu dedo está borracho, claramente 🍺",
+    "Eso no era el NO, era el botón de error 🤖",
+    "Me estás haciendo gaslighting 😵‍💫",
+    "¿Quieres guerra? Porque así empiezan las guerras 💥",
+    "Voy a fingir que no vi ese clic 🙄",
+    "Si clicas otra vez adopto un gato triste 🐱💔"
+];
+
+noButton.addEventListener("click", () => {
+    porcentaje += 20;
+    if (porcentaje > 100) porcentaje = 100;
+
+    noButton.style.transform = "scale(0.9)";
+    setTimeout(() => noButton.style.transform = "scale(1)", 150);
+
+    noButton.textContent = `No 😅 (${porcentaje}%)`;
+
+    mostrarMensajeTemporal(frases[Math.floor(Math.random() * frases.length)]);
+
+    if (porcentaje >= 100) {
+        activarRespuestaSi();
+    }
+});
+
+function mostrarMensajeTemporal(texto) {
+    const msg = document.createElement("div");
+    msg.textContent = texto;
+    msg.style.position = "absolute";
+    msg.style.left = "50%";
+    msg.style.top = "-20px";
+    msg.style.transform = "translateX(-50%)";
+    msg.style.color = "#ff2f63";
+    msg.style.fontWeight = "700";
+    msg.style.opacity = "1";
+    msg.style.transition = "opacity 1s ease, top 1s ease";
+
+    noButton.parentElement.appendChild(msg);
+
+    setTimeout(() => {
+        msg.style.opacity = "0";
+        msg.style.top = "-50px";
+    }, 50);
+
+    setTimeout(() => msg.remove(), 1200);
+}
+
+/* ------------------ BOTÓN SÍ ------------------ */
+const yesButton = document.getElementById("yes");
+const buttons = document.getElementById("buttons");
+const question = document.getElementById("question");
+const happyMessage = document.getElementById("happyMessage");
+const typedText = document.getElementById("typedText");
+const container = document.getElementById("container");
+
+yesButton.addEventListener("click", activarRespuestaSi);
+
+function activarRespuestaSi() {
+    buttons.style.display = "none";
+    question.style.display = "none";
+    happyMessage.style.display = "block";
+
+    const mensaje = "🥰 ¡SIIII TE AMO! 💕";
+    typedText.textContent = "";
+    let i = 0;
+
+    function escribir() {
+        if(i < mensaje.length){
+            typedText.textContent += mensaje.charAt(i++);
+            setTimeout(escribir, 50);
+        }
+    }
+    escribir();
+}
+</script>
+
+</body>
+</html>

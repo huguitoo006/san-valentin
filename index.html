@@ -1,135 +1,201 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>San Valentín 💖</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Invitación 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
-    background: radial-gradient(circle at top left, #ff8fa3, #ff6a88),
-                radial-gradient(circle at bottom right, #ffb3c1, #ff6a88);
-    background-size: 200% 200%;
-    animation: fondoPremium 12s ease-in-out infinite alternate;
-}
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-#container {
-    display: none;
-    text-align: center;
-    background: rgba(255,255,255,0.25);
-    padding: 45px 35px;
-    border-radius: 30px;
-    width: 360px;
-    backdrop-filter: blur(18px);
-}
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            position: relative;
+            background: radial-gradient(circle at top left, #ff8fa3, #ff6a88),
+                        radial-gradient(circle at bottom right, #ffb3c1, #ff6a88);
+            background-size: 200% 200%;
+            animation: fondoPremium 12s ease-in-out infinite alternate;
+        }
 
-#title {
-    font-family: 'Pacifico', cursive;
-    color: #ff2f63;
-    font-size: 36px;
-}
+        @keyframes fondoPremium {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
 
-#subtitle {
-    font-size: 18px;
-    color: #ff4d6d;
-    margin-bottom: 15px;
-}
+        .big-heart-emoji {
+            position: absolute;
+            font-size: 200px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: 1.2s ease;
+            z-index: 1;
+            filter: drop-shadow(0 0 25px rgba(255,0,80,0.4));
+            pointer-events: none;
+        }
 
-h1 {
-    font-family: 'Pacifico', cursive;
-    color: #ff2f63;
-    font-size: 34px;
-}
+        .big-heart-emoji.show {
+            opacity: 0.35;
+            transform: scale(1);
+        }
 
-.buttons {
-    margin-top: 25px;
-    position: relative;
-    height: 160px;
-}
+        .big-heart-css {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: #ff4d6d;
+            transform: rotate(-45deg) scale(0.5);
+            opacity: 0;
+            border-radius: 50% 50% 0 0;
+            z-index: 0;
+            transition: 1.2s ease;
+            filter: blur(4px);
+            pointer-events: none;
+        }
 
-button {
-    padding: 12px 32px;
-    font-size: 17px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 600;
-    border: none;
-}
+        .big-heart-css::before,
+        .big-heart-css::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: #ff4d6d;
+            border-radius: 50%;
+        }
 
-#yes {
-    background: linear-gradient(135deg,#ff4d6d,#ff7a9e);
-    color: white;
-}
+        .big-heart-css::before { top: -90px; left: 0; }
+        .big-heart-css::after { left: 90px; top: 0; }
 
-#no {
-    background-color: #e8e8e8;
-    color: #555;
-    position: absolute;
-    left: 120px;
-    top: 70px;
-}
+        .big-heart-css.show {
+            opacity: 0.25;
+            transform: rotate(-45deg) scale(1);
+        }
 
-.happy {
-    display: none;
-    margin-top: 10px;
-}
+        .heart {
+            position: absolute;
+            color: rgba(255,255,255,0.8);
+            font-size: calc(18px + (var(--i) * 6px));
+            animation: float calc(5s + (var(--i) * 1.5s)) linear infinite;
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
 
-.happy p {
-    font-size: 26px;
-    color: #ff2f63;
-    font-weight: 700;
-}
+        @keyframes float {
+            0% { transform: translateY(110vh) translateX(-20px) scale(0.8); opacity: 0; }
+            40% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(20px) scale(1.15); opacity: 0; }
+        }
 
-.happy img {
-    margin-top: 20px;
-    width: 100%;
-    height: 330px;
-    object-fit: cover;
-    border-radius: 25px;
-}
+        .container {
+            text-align: center;
+            background: rgba(255,255,255,0.25);
+            padding: 45px 35px;
+            border-radius: 30px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+            width: 360px;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.4);
+            animation: entradaCinematica 1.4s ease;
+        }
 
-#gameContainer {
-    width: 360px;
-    height: 300px;
-    margin-top: 20px;
-    overflow: hidden;
-    background: rgba(255,255,255,0.15);
-    border-radius: 25px;
-    position: relative;
-}
+        @keyframes entradaCinematica {
+            0% { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(5px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
 
-.game-heart {
-    position: absolute;
-    font-size: 30px;
-    cursor: pointer;
-}
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #ff2f63;
+            font-size: 34px;
+            margin-bottom: 25px;
+            text-shadow: 0 3px 8px rgba(255,0,80,0.25);
+        }
 
-#score {
-    font-size: 24px;
-    color: #ff2f63;
-    text-align: center;
-}
-</style>
+        .buttons {
+            margin-top: 25px;
+            position: relative;
+            height: 160px;
+        }
+
+        button {
+            padding: 12px 32px;
+            font-size: 17px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #yes {
+            background: linear-gradient(135deg, #ff4d6d, #ff7a9e);
+            color: white;
+            box-shadow: 0 6px 15px rgba(255,0,80,0.35);
+            transform: scale(1);
+            transition: transform 0.25s ease;
+        }
+
+        #yes:hover { transform: scale(1.12); }
+
+        #no {
+            background-color: #e8e8e8;
+            color: #555;
+            position: absolute;
+            left: 120px;
+            top: 70px;
+            pointer-events: none;
+            transition: left 0.25s ease, top 0.25s ease, transform 0.2s ease;
+            border: 1px solid #ccc;
+        }
+
+        .happy {
+            display: none;
+            margin-top: 10px;
+            opacity: 0;
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .happy p {
+            font-size: 26px;
+            color: #ff2f63;
+            font-weight: 700;
+        }
+
+        .happy img {
+            margin-top: 20px;
+            width: 100%;
+            height: 330px;
+            object-fit: cover;
+            border-radius: 25px;
+        }
+    </style>
 </head>
 
 <body>
 
-<div id="gameContainer">
-    <div id="score">Puntos: 0</div>
-</div>
+<div class="big-heart-emoji" id="bigHeartEmoji">💖</div>
+<div class="big-heart-css" id="bigHeartCSS"></div>
 
-<div id="container">
-    <h1 id="title">Hola corazón 💖</h1>
-    <div id="subtitle">Hugo tiene una pregunta para ti</div>
-    <h1 id="question">¿Quieres pasar San Valentín conmigo? 💘</h1>
+<span class="heart" style="--i:1; left:5%;">💖</span>
+<span class="heart" style="--i:2; left:15%;">💘</span>
+<span class="heart" style="--i:3; left:30%;">❤️</span>
+
+<div class="container" id="container">
+    <h1 id="question">¿Quieres salir conmigo? 💘</h1>
 
     <div class="buttons" id="buttons">
         <button id="yes">Sí 💖</button>
@@ -138,123 +204,73 @@ button {
 
     <div class="happy" id="happyMessage">
         <p id="typedText"></p>
-        <img src="foto.jpg">
+        <img src="foto.jpg" alt="Nuestra foto">
     </div>
 </div>
 
 <script>
-/* MINI JUEGO */
-const gameContainer = document.getElementById("gameContainer");
-const container = document.getElementById("container");
-const scoreDisplay = document.getElementById("score");
-let score = 0;
+    const noButton = document.getElementById("no");
+    const yesButton = document.getElementById("yes");
+    const hearts = document.querySelectorAll(".heart");
+    const question = document.getElementById("question");
+    const buttons = document.getElementById("buttons");
+    const happyMessage = document.getElementById("happyMessage");
+    const typedText = document.getElementById("typedText");
+    const bigHeartEmoji = document.getElementById("bigHeartEmoji");
+    const bigHeartCSS = document.getElementById("bigHeartCSS");
+    const container = document.getElementById("container");
 
-function crearCorazon() {
-    const heart = document.createElement("span");
-    heart.textContent = "💘";
-    heart.className = "game-heart";
-    heart.style.left = Math.random() * 320 + "px";
-    heart.style.top = "300px";
-    gameContainer.appendChild(heart);
+    function moveNoButton() {
+        const range = 120;
+        const rect = noButton.getBoundingClientRect();
+        let newX = rect.left + (Math.random() * 2 - 1) * range;
+        let newY = rect.top + (Math.random() * 2 - 1) * range;
 
-    function mover() {
-        const top = parseInt(heart.style.top);
-        if (top < -40) heart.remove();
-        else {
-            heart.style.top = top - 2 + "px";
-            requestAnimationFrame(mover);
-        }
+        const margin = 20;
+        const maxX = window.innerWidth - noButton.offsetWidth - margin;
+        const maxY = window.innerHeight - noButton.offsetHeight - margin;
+        newX = Math.max(margin, Math.min(newX, maxX));
+        newY = Math.max(margin, Math.min(newY, maxY));
+
+        noButton.style.position = "fixed";
+        noButton.style.left = newX + "px";
+        noButton.style.top = newY + "px";
     }
-    mover();
 
-    heart.onclick = () => {
-        score++;
-        scoreDisplay.textContent = `Puntos: ${score}`;
-        heart.remove();
-        if (score >= 10) {
-            gameContainer.style.display = "none";
-            container.style.display = "block";
+    document.addEventListener("mousemove", (e) => {
+        const rect = noButton.getBoundingClientRect();
+        const distancia = 120;
+
+        const cercaX = e.clientX > rect.left - distancia && e.clientX < rect.right + distancia;
+        const cercaY = e.clientY > rect.top - distancia && e.clientY < rect.bottom + distancia;
+
+        if (cercaX && cercaY) {
+            moveNoButton();
+
+            let scale = parseFloat(yesButton.dataset.scale || 1);
+            scale += 0.001;
+            yesButton.dataset.scale = scale;
+            yesButton.style.transform = `scale(${scale})`;
         }
-    };
-}
-setInterval(crearCorazon, 900);
+    });
 
-/* BOTÓN NO + FRASES */
-let porcentaje = 0;
-const noButton = document.getElementById("no");
+    yesButton.addEventListener("click", () => {
+        question.style.display = "none";
+        buttons.style.display = "none";
+        happyMessage.style.display = "block";
 
-const frases = [
-    "Eso ha dolido 😭",
-    "Ese NO parece un SÍ 😏",
-    "Tu dedo duda mucho 😂",
-    "Vamos que tú quieres 💖",
-    "JAJA dale al SÍ ya 🤣",
-    "Error 404: NO no encontrado 🤖",
-    "Eso cuenta como amor 😎"
-];
+        const mensaje = "🥰 ¡SIIIIII! ¡te quiero miamor! 💕";
+        typedText.textContent = "";
+        let i = 0;
 
-noButton.onclick = () => {
-    porcentaje += 20;
-    if (porcentaje > 100) porcentaje = 100;
-
-    noButton.textContent = `No 😅 (${porcentaje}%)`;
-    mostrarFrase(frases[Math.floor(Math.random() * frases.length)]);
-
-    if (porcentaje >= 100) activarRespuestaSi();
-};
-
-function mostrarFrase(texto) {
-    const msg = document.createElement("div");
-    msg.textContent = texto;
-    msg.style.position = "absolute";
-    msg.style.top = "-30px";
-    msg.style.left = "50%";
-    msg.style.transform = "translateX(-50%)";
-    msg.style.color = "#ff2f63";
-    msg.style.fontWeight = "700";
-    msg.style.opacity = "1";
-    msg.style.transition = "opacity 1s ease, top 1s ease";
-
-    noButton.parentElement.appendChild(msg);
-
-    setTimeout(() => {
-        msg.style.opacity = "0";
-        msg.style.top = "-60px";
-    }, 50);
-
-    setTimeout(() => msg.remove(), 1200);
-}
-
-/* BOTÓN SÍ */
-const yesButton = document.getElementById("yes");
-const buttons = document.getElementById("buttons");
-const question = document.getElementById("question");
-const title = document.getElementById("title");
-const subtitle = document.getElementById("subtitle");
-const happyMessage = document.getElementById("happyMessage");
-const typedText = document.getElementById("typedText");
-
-yesButton.onclick = activarRespuestaSi;
-
-function activarRespuestaSi() {
-    buttons.style.display = "none";
-    question.style.display = "none";
-    title.style.display = "none";
-    subtitle.style.display = "none";
-    happyMessage.style.display = "block";
-
-    const mensaje = "🥰 ¡TE AMO JIJIJI ya lo sabia yo! 💕";
-    let i = 0;
-    typedText.textContent = "";
-
-    function escribir() {
-        if (i < mensaje.length) {
-            typedText.textContent += mensaje.charAt(i++);
-            setTimeout(escribir, 50);
+        function escribir() {
+            if (i < mensaje.length) {
+                typedText.textContent += mensaje.charAt(i++);
+                setTimeout(escribir, 50);
+            }
         }
-    }
-    escribir();
-}
+        escribir();
+    });
 </script>
 
 </body>
